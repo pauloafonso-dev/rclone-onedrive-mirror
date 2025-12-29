@@ -1,0 +1,6 @@
+[Unit]
+Description=OneDrive backup (rclone) - oneshot
+
+[Service]
+Type=oneshot
+ExecStart=/home/paulo/bin/onedrive-backup.sh

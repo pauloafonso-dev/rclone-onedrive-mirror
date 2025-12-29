@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer para onedrive-backup (a cada 30 minutos, pega execuções perdidas)
+
+[Timer]
+OnUnitActiveSec=30min
+Persistent=true
+Unit=onedrive-backup.service
+
+[Install]
+WantedBy=timers.target
