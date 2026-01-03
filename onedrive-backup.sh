@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 # onedrive-backup.sh
-# Sincroniza /backup -> OneDrive:Home usando rclone
+# Sincroniza /backup -> OneDrive:Backup usando rclone
 set -euo pipefail
 
 # ---------- Configurações ----------
 SRC="/backup"
-REMOTE="OneDrive:Home"
-ARCHIVE_REMOTE_ROOT="OneDrive:Home/backup-archive"
+REMOTE="OneDrive:Backup"
+ARCHIVE_REMOTE_ROOT="OneDrive:Backup/backup-archive"
 USE_ARCHIVE=false
 TRANSFERS=4
 CHECKERS=8
 FAST_LIST="--fast-list"
 BWLIMIT=""
+EXCLUDE_GIT=true
 LOG_DIR="$HOME/.local/share/onedrive-backup"
 LOG_RETENTION_DAYS=30            # manter logs por N dias
 LOG_FILE="$LOG_DIR/backup-$(date +%F).log"
@@ -48,6 +49,10 @@ RCLONE_OPTS=("--transfers" "$TRANSFERS" "--checkers" "$CHECKERS" "--log-file" "$
 [ -n "$BWLIMIT" ] && RCLONE_OPTS+=("--bwlimit" "$BWLIMIT")
 $DRY_RUN && RCLONE_OPTS+=("--dry-run")
 
+if $EXCLUDE_GIT; then
+  RCLONE_OPTS+=("--exclude" "**/.git/**")
+fi
+
 if $USE_ARCHIVE; then
   BACKUP_DIR_REMOTE="$ARCHIVE_REMOTE_ROOT/$(date +%F_%H%M%S)"
   RCLONE_OPTS+=("--backup-dir" "$BACKUP_DIR_REMOTE")
@@ -61,8 +66,10 @@ if $DRY_RUN; then
   log "Performing dry-run (no changes will be made)."
 fi
 
+set +e
 "$RCLONE_BIN" sync "$SRC" "$REMOTE" "${RCLONE_OPTS[@]}"
 RCLONE_EXIT=$?
+set -e
 
 if [ $RCLONE_EXIT -eq 0 ]; then
   log "Backup completed successfully."
