@@ -1,0 +1,27 @@
+# Copie este arquivo para backup-config e ajuste os valores necessários.
+# Não coloque credenciais aqui; o rclone usa o próprio rclone.conf.
+
+SRC="/backup"
+SOURCE_MOUNTPOINT="/backup"
+REMOTE="OneDrive:Backup"
+
+# O arquivo principal deve permanecer versionado ao lado do script.
+EXCLUDE_FILE="$SCRIPT_DIR/backup-excludes.txt"
+# Opcional e local; este arquivo não é versionado.
+# LOCAL_EXCLUDE_FILE="$SCRIPT_DIR/backup-excludes.local"
+
+LOG_DIR="${HOME}/.local/share/onedrive-backup"
+LOG_RETENTION_DAYS=30
+TRANSFERS=4
+CHECKERS=8
+FAST_LIST=true
+BWLIMIT=""
+DRY_RUN=false
+DELETE_EXCLUDED=false
+MAX_DELETE=1000
+TRACK_RENAMES=false
+USE_ARCHIVE=false
+# Deve ficar fora de OneDrive:Backup quando USE_ARCHIVE=true.
+ARCHIVE_REMOTE_ROOT="OneDrive:Backup-archive"
+
+# Variáveis de ambiente informadas ao executar o script sobrescrevem estes valores.

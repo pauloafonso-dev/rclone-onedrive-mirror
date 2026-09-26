@@ -1,6 +1,7 @@
 [Unit]
 Description=OneDrive backup (rclone) - oneshot
+ConditionPathIsMountPoint=/backup
 
 [Service]
 Type=oneshot
-ExecStart=/home/paulo/bin/onedrive-backup.sh
+ExecStart=%h/bin/onedrive-backup.sh

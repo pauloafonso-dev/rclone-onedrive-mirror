@@ -1,0 +1,6 @@
+.git/**
+.Trash-1000/**
+.ruff_cache/**
+.ipython/profile_default/security/**
+.python_history
+wp-content/wflogs/**
